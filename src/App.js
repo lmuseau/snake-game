@@ -111,6 +111,8 @@ class App extends Component {
   increaseSpeed() {
     if (this.state.speed > 50) {
       return this.state.speed - 10;
+    } else {
+      return this.state.speed;
     }
   }
 
@@ -126,14 +128,18 @@ class App extends Component {
     let head = snake[snake.length - 1];
     snake.pop();
     snake.forEach(dot => {
-      if (head[0] == dot[0] && head[1] == dot[1]) {
+      if (head[0] === dot[0] && head[1] === dot[1]) {
         this.onGameOver();
       }
     })
   }
 
   onGameOver() { // game over message
-    alert(`Game Over. Snake length is ${this.state.snakeDots.length}`);
+    if (this.state.snakeDots.length < 15) {
+      alert(`Lol nice try. Your snake was ${this.state.snakeDots.length} squares long. Try to get it above 15 squares next time!`)
+    } else {
+      alert(`Awesome job! Your snake was ${this.state.snakeDots.length} squares long :)`);
+    }
     this.setState(initialState)
   }
 
