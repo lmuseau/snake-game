@@ -16,16 +16,25 @@ const initialState = {
   direction: 'RIGHT',
   snakeDots: [
     [0, 0],
-    [2, 0]
+    [2, 0],
+    [4, 0]
   ]
 }
 
 class App extends Component {
 
-  state = initialState;
+  constructor(props) {
+    super();
+    this.state = initialState;
+  }
+
+  speed() {
+    clearInterval(this.interval);
+    this.interval = setInterval(this.moveSnake, this.state.speed);
+  }
 
   componentDidMount() {
-    setInterval(this.moveSnake, this.state.speed);
+    this.speed();
     document.onkeydown = this.onKeyDown;
   }
 
@@ -33,6 +42,7 @@ class App extends Component {
     this.checkIfOutOfBorders();
     this.checkIfCollapsed();
     this.checkIfEat();
+    this.speed();
   }
 
   onKeyDown = (e) => { // this code changes direction of the snake
@@ -82,28 +92,25 @@ class App extends Component {
   checkIfEat() {
     let head = this.state.snakeDots[this.state.snakeDots.length - 1];
     let food = this.state.food;
-    if (head[0] == food[0] && head[1] == food[1]) {
-      this.setState({
-        food: getRandomCoordinates()
-      })
-      this.enlargeSnake();
-      this.increaseSpeed();
+    if (head[0] === food[0] && head[1] === food[1]) {
+      let newState = { ...this.state };
+      newState.food = getRandomCoordinates();
+      newState.snakeDots = this.enlargeSnake();
+      newState.speed = this.increaseSpeed();
+      this.setState(newState);
+      this.speed();
     }
   }
 
   enlargeSnake() {
     let newSnake = [...this.state.snakeDots];
     newSnake.unshift([]);
-    this.setState({
-      snakeDots: newSnake
-    })
+    return newSnake;
   }
 
   increaseSpeed() {
-    if (this.state.speed > 10) {
-      this.setState({
-        speed: this.state.speed - 10
-      })
+    if (this.state.speed > 50) {
+      return this.state.speed - 10;
     }
   }
 
