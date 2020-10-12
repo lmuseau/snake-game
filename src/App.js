@@ -28,7 +28,7 @@ class App extends Component {
     this.state = initialState;
   }
 
-  speed() {
+  speed() { // speed handling
     clearInterval(this.interval);
     this.interval = setInterval(this.moveSnake, this.state.speed);
   }
@@ -89,7 +89,7 @@ class App extends Component {
     }) 
   }
 
-  checkIfEat() {
+  checkIfEat() { // this hits when snake goes over red square
     let head = this.state.snakeDots[this.state.snakeDots.length - 1];
     let food = this.state.food;
     if (head[0] === food[0] && head[1] === food[1]) {
@@ -102,13 +102,13 @@ class App extends Component {
     }
   }
 
-  enlargeSnake() {
+  enlargeSnake() { // increase size of snake
     let newSnake = [...this.state.snakeDots];
     newSnake.unshift([]);
     return newSnake;
   }
 
-  increaseSpeed() {
+  increaseSpeed() { // increase speed of snake
     if (this.state.speed > 50) {
       return this.state.speed - 10;
     } else {
